@@ -42,10 +42,23 @@ namespace MauiAppTempoRafonha.Services
                         sunset = sunset.ToString(),
                     }; // Fecha obj do Tempo.
                 } // Fecha if se o status do servidor foi de sucesso
-            } // fecha laço using
-
+            }
             return t;
+        }// fecha laço using
+        public static async Task<HttpResponseMessage> GetResponseStatus(string cidade)
+        {
+            string chave = "6135072afe7f6cec1537d5cb08a5a1a2";
+            string url = $"https://api.openweathermap.org/data/2.5/weather?q={cidade}&units=metric&appid={chave}";
+
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage resp = await client.GetAsync(url);
+                return resp;
+            }
         }
+
+
     }
 }
+
 

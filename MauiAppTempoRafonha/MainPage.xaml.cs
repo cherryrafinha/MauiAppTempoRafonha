@@ -1,5 +1,6 @@
 ﻿using MauiAppTempoRafonha.Models;
 using MauiAppTempoRafonha.Services;
+using System.Net;
 
 namespace MauiAppTempoRafonha
 {
@@ -39,16 +40,27 @@ namespace MauiAppTempoRafonha
                     }
                     else
                     {
+                        // Se GetPrevisao retornar null, vamos verificar o status code diretamente
+                        HttpResponseMessage response = await DataService.GetResponseStatus(txt_cidade.Text);
 
-                        lbl_res.Text = "Sem dados de Previsão";
+                        if (response.StatusCode == HttpStatusCode.NotFound)
+                        {
+                            lbl_res.Text = "Cidade não encontrada. Verifique o nome digitado.";
+                        }
+                        else if (!response.IsSuccessStatusCode)
+                        {
+                            lbl_res.Text = $"Erro ao obter a previsão: {response.StatusCode}";
+                        }
+                        else
+                        {
+                            lbl_res.Text = "Sem dados de previsão. Tente novamente mais tarde.";
+                        }
                     }
-
                 }
                 else
                 {
                     lbl_res.Text = "Preencha a cidade.";
                 }
-
             }
             catch (Exception ex)
             {
